@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Surya Sweets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-dashboard-body">
+    <header class="admin-header">
+        <div class="logo">Surya Sweets Admin</div>
+        <nav class="main-nav">
+            <a href="index.html">Store</a>
+            <a href="#" id="adminLogout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <div class="admin-tabs">
+            <button type="button" class="admin-tab active" data-tab="categories">Categories</button>
+            <button type="button" class="admin-tab" data-tab="products">Products & Stock</button>
+            <button type="button" class="admin-tab" data-tab="orders">Order History</button>
+        </div>
+
+        <section id="tab-categories" class="admin-panel active">
+            <h2>Categories</h2>
+            <div class="admin-form admin-form-block">
+                <input type="text" id="catName" placeholder="Category name">
+                <div class="img-input-group">
+                    <label class="img-mode-label">Image: </label>
+                    <label class="radio-opt"><input type="radio" name="catImgMode" value="url" checked> URL</label>
+                    <label class="radio-opt"><input type="radio" name="catImgMode" value="file"> Upload</label>
+                    <span class="img-url-wrap"><input type="text" id="catImage" class="img-url-input" placeholder="Image URL e.g. assets/sweets.png"></span>
+                    <span class="img-file-wrap" style="display:none"><input type="file" id="catImageFile" accept="image/*" class="img-file-input"></span>
+                </div>
+                <div class="img-adjust-group">
+                    <label>Adjust: </label>
+                    <select id="catObjectFit">
+                        <option value="contain">Fit </option>
+                        <option value="cover">Fill </option>
+                        <option value="fill">Stretch</option>
+                    </select>
+                </div>
+                <button type="button" id="addCategoryBtn" class="btn">Add Category</button>
+            </div>
+            <ul id="categoryList" class="admin-list"></ul>
+        </section>
+
+        <section id="tab-products" class="admin-panel">
+            <h2>Products & Stock</h2>
+            <p class="admin-hint">Category: <select id="productCategory"></select></p>
+            <div class="admin-form admin-form-block">
+                <input type="text" id="prodName" placeholder="Product name">
+                <input type="number" id="prodPrice" placeholder="Price (₹)" min="0">
+                <div class="img-input-group">
+                    <label class="img-mode-label">Image: </label>
+                    <label class="radio-opt"><input type="radio" name="prodImgMode" value="url" checked> URL</label>
+                    <label class="radio-opt"><input type="radio" name="prodImgMode" value="file"> Upload</label>
+                    <span class="img-url-wrap"><input type="text" id="prodImage" class="img-url-input" placeholder="Image URL"></span>
+                    <span class="img-file-wrap" style="display:none"><input type="file" id="prodImageFile" accept="image/*" class="img-file-input"></span>
+                </div>
+                <div class="img-adjust-group">
+                    <label>Adjust: </label>
+                    <select id="prodObjectFit">
+                        <option value="contain">Fit </option>
+                        <option value="cover">Fill </option>
+                        <option value="fill">Stretch</option>
+                    </select>
+                </div>
+                <label class="stock-label"><input type="checkbox" id="prodInStock" checked> In stock</label>
+                <button type="button" id="addProductBtn" class="btn">Add Product</button>
+            </div>
+            <ul id="productList" class="admin-list"></ul>
+        </section>
+
+        <section id="tab-orders" class="admin-panel">
+            <h2>Order History</h2>
+            <div class="orders-table-wrap">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>

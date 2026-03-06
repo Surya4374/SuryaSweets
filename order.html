@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Surya Sweets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn" aria-label="Back to Home">← Home</a>
+        <a href="index.html" class="logo">Surya Sweets</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+        </nav>
+    </header>
+
+    <main class="order-confirm-page">
+        <h1 class="confirm-title">😊 Order confirmed!</h1>
+        <p class="order-meta">Order ID: <span id="orderId"></span></p>
+        <p class="order-meta">Date: <span id="orderDate"></span></p>
+
+        <div class="order-summary order-summary-final">
+            <h3>Your Order Details</h3>
+            <ul id="finalOrderList"></ul>
+            <h2 class="final-total">Total: ₹<span id="finalTotal">0</span></h2>
+        </div>
+
+        <div class="order-actions">
+            <button onclick="window.print()" class="checkout-btn print-btn">🖨️ Print Receipt</button>
+            <a href="index.html" class="btn btn-secondary">← Home</a>
+        </div>
+    </main>
+
+    <script src="js/nav.js"></script>
+    <script src="js/order.js"></script>
+</body>
+</html>

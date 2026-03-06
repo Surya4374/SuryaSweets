@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Surya Sweets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-login-box">
+        <h1>Admin Login</h1>
+        <p class="admin-hint">Surya Sweets admin panel</p>
+        <form id="adminLoginForm">
+            <label>Username</label>
+            <input type="text" id="adminUser" required placeholder="admin">
+            <label>Password</label>
+            <input type="password" id="adminPass" required placeholder="••••••••">
+            <button type="submit" class="checkout-btn">Login</button>
+        </form>
+        <!-- <p class="admin-default">Default: admin / Admin@123</p> -->
+        <a href="index.html" class="back-store">← Back to Store</a>
+    </div>
+    <script src="js/data.js"></script>
+    <script src="js/admin-auth.js"></script>
+</body>
+</html>

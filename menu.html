@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Surya Sweets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn" aria-label="Back to Home">← Home</a>
+        <a href="index.html" class="logo">Surya Sweets</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="menu.html" class="cart-link">🛒 Cart: <span id="cartCount">0</span></a>
+        </nav>
+    </header>
+
+    <main class="menu-page">
+        <h2 id="categoryTitle" class="category-title"></h2>
+        <section class="categories products-grid" id="productContainer"></section>
+
+        <aside class="order-sidebar">
+            <div class="order-summary">
+                <h3>Your Order</h3>
+                <ul id="orderList"></ul>
+                <p class="grand-total-text">Grand Total: ₹<span id="grandTotal">0</span></p>
+            </div>
+            <div class="order-actions">
+                <button id="clearCartBtn" class="btn btn-secondary">Clear Cart</button>
+                <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+            </div>
+        </aside>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>

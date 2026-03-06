@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay - Surya Sweets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <a href="menu.html" class="back-btn" aria-label="Back to Menu">← Back</a>
+        <a href="index.html" class="logo">Surya Sweets</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+        </nav>
+    </header>
+
+    <main class="payment-page">
+        <h1 class="payment-title">Complete Payment</h1>
+
+        <div class="order-summary payment-summary">
+            <h3>Order Summary</h3>
+            <ul id="paymentOrderList"></ul>
+            <p class="pay-amount">Pay: <strong>₹<span id="paymentTotal">0</span></strong></p>
+        </div>
+
+        <div class="upi-box">
+            <!-- <p class="upi-hint">Scan QR se amount auto fill ho jayega, ya niche UPI ID use karein.</p> -->
+            <div class="qr-wrap">
+                <img src="assets/scan.jpeg" alt="UPI QR Code" class="qr-image" id="qrImage">
+            </div>
+            <p class="upi-id">UPI ID: <strong id="upiId">7850990344@ptsbi</strong></p>
+            <a id="upiPayLink" href="#" class="btn upi-link-btn">📱 Pay via UPI (Amount auto)</a>
+        </div>
+
+        <!-- <p class="after-pay-text">Payment karke niche button dabayein.</p> -->
+        <button id="paidBtn" class="checkout-btn paid-btn">✓ I have paid</button>
+
+        <div class="page-actions">
+            <a href="menu.html" class="btn btn-secondary">← Edit Order</a>
+            <a href="index.html" class="btn btn-secondary">Home</a>
+        </div>
+    </main>
+
+    <script src="js/nav.js"></script>
+    <script src="js/payment.js"></script>
+</body>
+</html>
