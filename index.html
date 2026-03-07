@@ -80,12 +80,29 @@
         </header>
         <div class="kiosk-content payment-content">
             <p class="payment-total">Total Amount: <strong>₹<span id="paymentTotalAmount">0</span></strong></p>
-            <div class="payment-qr-placeholder" id="paymentQrPlaceholder">
-                <img src="assets/scan.jpeg" alt="UPI QR Code">
-                <!-- <span>QR Code</span> -->
-                <small>Scan with UPI app</small>
+            <div class="payment-qr-container" id="paymentQrContainer">
+                <img src="assets/scan.jpeg" alt="UPI QR Code" id="paymentQRImage">
+                <div class="qr-instructions">
+                    <strong>Scan this QR Code with any UPI App</strong><br>
+                    • PhonePe, Google Pay, Paytm<br>
+                    • Or any other UPI application<br>
+                    <small>Wait for payment confirmation</small>
+                </div>
             </div>
             <button type="button" class="kiosk-btn kiosk-btn-primary kiosk-btn-large" id="btnIHavePaid">I Have Paid</button>
+            <div class="payment-verification" id="paymentVerification" style="display: none;">
+                <h3>Payment Confirmation</h3>
+                <p>Did you complete the payment successfully?</p>
+                <div class="payment-options">
+                    <button type="button" class="kiosk-btn kiosk-btn-primary payment-option" id="btnPaymentSuccess">Yes, Payment Done</button>
+                    <button type="button" class="kiosk-btn kiosk-btn-secondary payment-option" id="btnPaymentWithId">I have Transaction ID</button>
+                </div>
+                <div class="transaction-input-group" id="transactionInputGroup" style="display: none;">
+                    <input type="text" id="transactionId" placeholder="Enter Transaction ID (Optional)" maxlength="50">
+                    <button type="button" class="kiosk-btn kiosk-btn-primary" id="btnVerifyPayment">Confirm Payment</button>
+                </div>
+                <button type="button" class="kiosk-btn kiosk-btn-secondary" id="btnCancelVerification">Cancel</button>
+            </div>
         </div>
     </section>
 
@@ -109,6 +126,7 @@
                 <p class="receipt-address">Beawar, Rajasthan</p>
                 <p class="receipt-meta">Order No: <span id="receiptOrderNo"></span></p>
                 <p class="receipt-meta">Date & Time: <span id="receiptDateTime"></span></p>
+                <p class="receipt-meta">Transaction ID: <span id="receiptTransactionId"></span></p>
                 <hr class="receipt-hr">
                 <ul class="receipt-items" id="receiptItems"></ul>
                 <hr class="receipt-hr">
@@ -123,6 +141,7 @@
     </section>
 
     <script src="js/kiosk-data.js"></script>
-    <script src="js/kiosk.js"></script>
+<script src="js/error-handler.js"></script>
+<script src="js/kiosk.js"></script>
 </body>
 </html>

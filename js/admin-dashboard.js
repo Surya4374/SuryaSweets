@@ -1,5 +1,19 @@
 (function () {
-    if (!sessionStorage.getItem("adminLoggedIn")) {
+    // Enhanced security checks
+    function checkSessionTimeout() {
+        var loginTime = sessionStorage.getItem("adminLoginTime");
+        var sessionTimeout = 30 * 60 * 1000; // 30 minutes
+        
+        if (!loginTime || (new Date().getTime() - parseInt(loginTime)) > sessionTimeout) {
+            sessionStorage.removeItem("adminLoggedIn");
+            sessionStorage.removeItem("adminLoginTime");
+            window.location.href = "admin.html";
+            return false;
+        }
+        return true;
+    }
+    
+    if (!sessionStorage.getItem("adminLoggedIn") || !checkSessionTimeout()) {
         window.location.href = "admin.html";
         return;
     }
@@ -7,8 +21,31 @@
     var store = window.SuryaStore;
     if (!store) return;
 
+    // Update session activity
+    function updateSessionActivity() {
+        sessionStorage.setItem("adminLoginTime", new Date().getTime());
+    }
+    
+    // Auto-logout on inactivity
+    var activityTimer;
+    function resetActivityTimer() {
+        clearTimeout(activityTimer);
+        activityTimer = setTimeout(function() {
+            sessionStorage.removeItem("adminLoggedIn");
+            sessionStorage.removeItem("adminLoginTime");
+            window.location.href = "admin.html";
+        }, 30 * 60 * 1000); // 30 minutes
+    }
+    
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(function(event) {
+        document.addEventListener(event, resetActivityTimer, true);
+    });
+    
+    resetActivityTimer();
+
     document.getElementById("adminLogout").addEventListener("click", function () {
         sessionStorage.removeItem("adminLoggedIn");
+        sessionStorage.removeItem("adminLoginTime");
         window.location.href = "admin.html";
     });
 
@@ -21,6 +58,7 @@
         });
         if (tabId === "products") renderProducts();
         if (tabId === "orders") renderOrders();
+        if (tabId === "analytics") renderAnalytics();
     }
 
     document.querySelectorAll(".admin-tab").forEach(function (btn) {
@@ -187,6 +225,14 @@
     function renderOrders() {
         var tbody = document.getElementById("ordersTableBody");
         var orders = store.getOrdersHistory();
+        var analytics = store.getSalesAnalytics();
+        
+        // Update analytics summary
+        document.getElementById("todayOrdersCount").textContent = analytics.todayOrders;
+        document.getElementById("todayRevenue").textContent = "₹" + analytics.todayRevenue;
+        document.getElementById("totalOrdersCount").textContent = analytics.totalOrders;
+        document.getElementById("totalRevenue").textContent = "₹" + analytics.totalRevenue;
+        
         tbody.innerHTML = "";
         orders.slice().reverse().forEach(function (o) {
             var tr = document.createElement("tr");
@@ -195,10 +241,75 @@
                 var d = o.items[it];
                 itemsStr += it + " x " + d.quantity + "; ";
             }
-            tr.innerHTML = "<td>" + (o.orderId || "—") + "</td><td>" + (o.date || "—") + "</td><td>" + itemsStr + "</td><td>₹" + (o.total || 0) + "</td>";
+            tr.innerHTML = "<td>" + (o.orderId || "—") + "</td><td>" + (o.date || "—") + "</td><td>" + itemsStr + "</td><td>₹" + (o.total || 0) + "</td><td>" + (o.paymentMethod || "UPI") + "</td><td>" + (o.transactionId || "—") + "</td>";
             tbody.appendChild(tr);
         });
     }
+
+    function renderAnalytics() {
+        var analytics = store.getSalesAnalytics();
+        
+        // Render top products
+        var topProductsList = document.getElementById("topProductsList");
+        topProductsList.innerHTML = "";
+        
+        var sortedProducts = Object.entries(analytics.topProducts)
+            .sort(function(a, b) { return b[1] - a[1]; })
+            .slice(0, 10);
+            
+        sortedProducts.forEach(function(product) {
+            var li = document.createElement("li");
+            li.innerHTML = "<strong>" + product[0] + "</strong>: " + product[1] + " units sold";
+            topProductsList.appendChild(li);
+        });
+        
+        // Render category sales
+        var categorySalesList = document.getElementById("categorySalesList");
+        categorySalesList.innerHTML = "";
+        
+        var sortedCategories = Object.entries(analytics.categorySales)
+            .sort(function(a, b) { return b[1] - a[1]; });
+            
+        sortedCategories.forEach(function(category) {
+            var li = document.createElement("li");
+            li.innerHTML = "<strong>" + category[0] + "</strong>: ₹" + category[1];
+            categorySalesList.appendChild(li);
+        });
+    }
+
+    // Export orders functionality
+    document.getElementById("exportOrdersBtn").addEventListener("click", function() {
+        var orders = store.getOrdersHistory();
+        var csvContent = "Order ID,Date,Items,Total,Payment Method,Transaction ID\n";
+        
+        orders.forEach(function(order) {
+            var itemsStr = "";
+            for (var item in order.items) {
+                itemsStr += item + " x " + order.items[item].quantity + "; ";
+            }
+            csvContent += order.orderId + "," + order.date + ',"' + itemsStr + '",' + order.total + "," + order.paymentMethod + "," + (order.transactionId || "") + "\n";
+        });
+        
+        var blob = new Blob([csvContent], { type: 'text/csv' });
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'orders_export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    });
+
+    // Clear orders functionality
+    document.getElementById("clearOrdersBtn").addEventListener("click", function() {
+        if (confirm("Are you sure you want to clear all order history? This action cannot be undone.")) {
+            localStorage.removeItem("ordersHistory");
+            renderOrders();
+            renderAnalytics();
+            alert("Order history cleared successfully.");
+        }
+    });
 
     fillCategorySelect();
     renderCategories();

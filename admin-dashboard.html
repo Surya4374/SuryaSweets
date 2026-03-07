@@ -23,6 +23,7 @@
             <button type="button" class="admin-tab active" data-tab="categories">Categories</button>
             <button type="button" class="admin-tab" data-tab="products">Products & Stock</button>
             <button type="button" class="admin-tab" data-tab="orders">Order History</button>
+            <button type="button" class="admin-tab" data-tab="analytics">Analytics</button>
         </div>
 
         <section id="tab-categories" class="admin-panel active">
@@ -78,6 +79,28 @@
 
         <section id="tab-orders" class="admin-panel">
             <h2>Order History</h2>
+            <div class="analytics-summary">
+                <div class="analytics-card">
+                    <h3>Today's Orders</h3>
+                    <span id="todayOrdersCount">0</span>
+                </div>
+                <div class="analytics-card">
+                    <h3>Today's Revenue</h3>
+                    <span id="todayRevenue">₹0</span>
+                </div>
+                <div class="analytics-card">
+                    <h3>Total Orders</h3>
+                    <span id="totalOrdersCount">0</span>
+                </div>
+                <div class="analytics-card">
+                    <h3>Total Revenue</h3>
+                    <span id="totalRevenue">₹0</span>
+                </div>
+            </div>
+            <div class="orders-controls">
+                <button type="button" class="btn btn-small" id="exportOrdersBtn">Export Orders</button>
+                <button type="button" class="btn btn-small btn-danger" id="clearOrdersBtn">Clear All Orders</button>
+            </div>
             <div class="orders-table-wrap">
                 <table class="orders-table">
                     <thead>
@@ -86,15 +109,32 @@
                             <th>Date</th>
                             <th>Items</th>
                             <th>Total</th>
+                            <th>Payment</th>
+                            <th>Transaction ID</th>
                         </tr>
                     </thead>
                     <tbody id="ordersTableBody"></tbody>
                 </table>
             </div>
         </section>
+        
+        <section id="tab-analytics" class="admin-panel">
+            <h2>Sales Analytics</h2>
+            <div class="analytics-grid">
+                <div class="analytics-section">
+                    <h3>Top Selling Products</h3>
+                    <ul id="topProductsList" class="analytics-list"></ul>
+                </div>
+                <div class="analytics-section">
+                    <h3>Category Performance</h3>
+                    <ul id="categorySalesList" class="analytics-list"></ul>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script src="js/data.js"></script>
+    <script src="js/error-handler.js"></script>
     <script src="js/admin-dashboard.js"></script>
 </body>
 </html>

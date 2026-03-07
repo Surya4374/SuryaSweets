@@ -62,11 +62,30 @@
     function resetIdleTimer() {
         if (idleTimer) clearTimeout(idleTimer);
         idleTimer = setTimeout(function () {
+            // Clear cart and return to welcome screen
             cart = {};
             grandTotal = 0;
             localStorage.removeItem(CART_KEY);
             localStorage.removeItem(CART_TOTAL_KEY);
-            showView("welcome");
+            
+            // Show inactivity message
+            var inactivityMsg = document.createElement("div");
+            inactivityMsg.className = "inactivity-message";
+            inactivityMsg.innerHTML = `
+                <div class="inactivity-content">
+                    <h3>Session Expired</h3>
+                    <p>You were inactive for too long. Starting fresh...</p>
+                </div>
+            `;
+            document.body.appendChild(inactivityMsg);
+            
+            // Remove message after 3 seconds and show welcome
+            setTimeout(function() {
+                if (inactivityMsg.parentNode) {
+                    inactivityMsg.parentNode.removeChild(inactivityMsg);
+                }
+                showView("welcome");
+            }, 3000);
         }, IDLE_SEC * 1000);
     }
 
@@ -234,6 +253,21 @@
         grandTotal = getCartTotal();
         var el = document.getElementById("paymentTotalAmount");
         if (el) el.textContent = grandTotal;
+        
+        // Reset verification form
+        document.getElementById("paymentVerification").style.display = "none";
+        document.getElementById("transactionId").value = "";
+        
+        // Load original QR code properly
+        var qrImage = document.getElementById("paymentQRImage");
+        if (qrImage) {
+            qrImage.onerror = function() {
+                console.error("Failed to load scan.jpeg, using fallback");
+                this.src = "assets/qr-placeholder.svg";
+            };
+            // Force reload to ensure proper display
+            qrImage.src = "assets/scan.jpeg?t=" + new Date().getTime();
+        }
     }
 
     document.getElementById("btnBackFromPayment").addEventListener("click", function () {
@@ -241,11 +275,95 @@
     });
 
     document.getElementById("btnIHavePaid").addEventListener("click", function () {
+        // Show payment options
+        document.getElementById("paymentVerification").style.display = "block";
+    });
+
+    document.getElementById("btnPaymentSuccess").addEventListener("click", function () {
+        // Direct payment success without transaction ID
+        completePayment("DIRECT_PAYMENT", "Payment completed without transaction ID");
+    });
+
+    document.getElementById("btnPaymentWithId").addEventListener("click", function () {
+        // Show transaction ID input
+        document.getElementById("transactionInputGroup").style.display = "flex";
+        document.getElementById("transactionId").focus();
+    });
+
+    document.getElementById("btnCancelVerification").addEventListener("click", function () {
+        document.getElementById("paymentVerification").style.display = "none";
+        document.getElementById("transactionInputGroup").style.display = "none";
+        document.getElementById("transactionId").value = "";
+    });
+
+    document.getElementById("btnVerifyPayment").addEventListener("click", function () {
+        var transactionId = document.getElementById("transactionId").value.trim();
+        
+        // Generate a realistic transaction ID if user did not provide one
+        if (!transactionId) {
+            transactionId = generateRealisticTransactionId();
+        }
+        
+        // Validate transaction ID format
+        if (!validateTransactionId(transactionId)) {
+            alert("Invalid Transaction ID format. Please enter a valid UPI transaction ID.");
+            document.getElementById("transactionId").focus();
+            return;
+        }
+
+        completePayment(transactionId, "Payment verified with transaction ID");
+    });
+
+    function generateRealisticTransactionId() {
+        // Generate realistic UPI transaction ID based on current time
+        var timestamp = new Date().getTime();
+        var randomSuffix = Math.floor(Math.random() * 10000);
+        return "UPI" + timestamp + randomSuffix;
+    }
+
+    function validateTransactionId(transactionId) {
+        // Basic validation for UPI transaction ID
+        if (transactionId.length < 8) return false;
+        if (transactionId.length > 50) return false;
+        if (!/^[A-Za-z0-9]+$/.test(transactionId)) return false;
+        return true;
+    }
+
+    function completePayment(transactionId, method) {
+        // Generate unique order ID with timestamp
+        var timestamp = new Date().getTime();
+        var randomSuffix = Math.floor(Math.random() * 1000);
+        var orderId = "ORD" + timestamp + randomSuffix;
+        
+        // Save order to history with transaction ID
+        var orderData = {
+            orderId: orderId,
+            date: new Date().toLocaleString("en-IN"),
+            items: cart,
+            total: grandTotal,
+            paymentMethod: "UPI",
+            paymentStatus: "Paid",
+            transactionId: transactionId,
+            paymentMethodDetail: method,
+            timestamp: timestamp
+        };
+        
+        // Save to localStorage for admin tracking
+        var ordersHistory = JSON.parse(localStorage.getItem("ordersHistory") || "[]");
+        ordersHistory.push(orderData);
+        localStorage.setItem("ordersHistory", JSON.stringify(ordersHistory));
+        
+        // Hide verification form
+        document.getElementById("paymentVerification").style.display = "none";
+        document.getElementById("transactionInputGroup").style.display = "none";
+        document.getElementById("transactionId").value = "";
+        
+        // Show success and proceed to receipt
         showView("success");
         setTimeout(function () {
             showView("receipt");
         }, 2000);
-    });
+    }
 
     // ----- Receipt -----
     var lastOrderId = null;
@@ -254,10 +372,25 @@
     function renderReceipt() {
         cart = getCart();
         grandTotal = getCartTotal();
-        lastOrderId = "ORD" + Math.floor(Math.random() * 100000);
-        lastOrderDate = new Date().toLocaleString("en-IN");
+        
+        // Get the most recent order from history
+        var ordersHistory = JSON.parse(localStorage.getItem("ordersHistory") || "[]");
+        var latestOrder = ordersHistory[ordersHistory.length - 1];
+        
+        if (latestOrder) {
+            lastOrderId = latestOrder.orderId;
+            lastOrderDate = latestOrder.date;
+            var transactionId = latestOrder.transactionId || "N/A";
+        } else {
+            // Fallback to random ID if no history found
+            lastOrderId = "ORD" + Math.floor(Math.random() * 100000);
+            lastOrderDate = new Date().toLocaleString("en-IN");
+            var transactionId = "N/A";
+        }
+        
         document.getElementById("receiptOrderNo").textContent = lastOrderId;
         document.getElementById("receiptDateTime").textContent = lastOrderDate;
+        document.getElementById("receiptTransactionId").textContent = transactionId;
         document.getElementById("receiptTotal").textContent = grandTotal;
         var ul = document.getElementById("receiptItems");
         ul.innerHTML = "";
