@@ -2,82 +2,127 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surya Sweets – Fresh Mithai & More</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6B3426">
+    <title>Surya Sweets – Self Order Kiosk</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/kiosk.css">
 </head>
-<body>
+<body class="kiosk-body">
 
-    <!-- Sticky Navbar -->
-    <header>
-        <span class="back-btn placeholder"></span>
-        <a href="index.html" class="logo">Surya Sweets</a>
-        <button class="nav-toggle" id="navToggle" aria-label="Open menu">
-            <span></span><span></span><span></span>
-        </button>
-        <nav class="main-nav" id="mainNav">
-            <a href="index.html">Home</a>
-            <a href="menu.html">Menu</a>
-            <a href="menu.html" class="cart-link">🛒 <span id="cartCount">0</span></a>
-        </nav>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-        <h1>Welcome to Surya Sweets</h1>
-        <p>Fresh mithai, ice creams & more. Choose a category to start ordering.</p>
+    <!-- ========== WELCOME SCREEN ========== -->
+    <section id="view-welcome" class="kiosk-view active">
+        <div class="welcome-content">
+            <h1 class="welcome-title">Welcome to Surya Sweets</h1>
+            <p class="welcome-subtitle">Touch to Start Ordering</p>
+            <button type="button" class="welcome-tap-area" id="btnStartOrder" aria-label="Start ordering"></button>
+        </div>
+        <a href="admin.html" class="kiosk-admin-link">Staff</a>
     </section>
 
-    <!-- Search & category filters -->
-    <div class="search-filters-wrap">
-        <div class="search-bar-wrap">
-            <input type="text" id="searchCategories" placeholder="Search categories..." aria-label="Search categories">
+    <!-- ========== CATEGORIES SCREEN ========== -->
+    <section id="view-categories" class="kiosk-view">
+        <header class="kiosk-header">
+            <button type="button" class="kiosk-back" id="btnBackToWelcome" aria-label="Back">←</button>
+            <h2 class="kiosk-title">Choose Category</h2>
+            <div class="kiosk-cart-wrap">
+                <button type="button" class="kiosk-cart-btn" id="btnOpenCart" aria-label="Open cart">
+                    <span class="kiosk-cart-icon">🛒</span>
+                    <span class="kiosk-cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </header>
+        <div class="kiosk-content">
+            <div class="category-grid" id="categoryGrid"></div>
         </div>
-        <div class="category-filters" id="categoryFilters">
-            <button type="button" class="filter-btn active" data-category="">All</button>
-        </div>
-    </div>
+    </section>
 
-    <!-- Category grid -->
-    <section class="categories" id="categoryContainer"></section>
+    <!-- ========== PRODUCTS SCREEN ========== -->
+    <section id="view-products" class="kiosk-view">
+        <header class="kiosk-header">
+            <button type="button" class="kiosk-back" id="btnBackToCategories" aria-label="Back">←</button>
+            <h2 class="kiosk-title" id="productsCategoryTitle">Products</h2>
+            <div class="kiosk-cart-wrap">
+                <button type="button" class="kiosk-cart-btn" id="btnOpenCartFromProducts" aria-label="Open cart">
+                    <span class="kiosk-cart-icon">🛒</span>
+                    <span class="kiosk-cart-count" id="cartCountProducts">0</span>
+                </button>
+            </div>
+        </header>
+        <div class="kiosk-content">
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+    </section>
 
-    <!-- Professional footer -->
-    <footer class="site-footer">
-        <div class="footer-grid">
-            <div>
-                <h4>Address</h4>
-                <p>123 Sweet Street, City Market<br>Near Temple Road</p>
-            </div>
-            <div>
-                <h4>Contact</h4>
-                <p>Phone: +91 7850990344</p>
-                <p>Email: suryasweets@example.com</p>
-            </div>
-            <div>
-                <h4>Opening Hours</h4>
-                <p>Mon – Sat: 9:00 AM – 9:00 PM</p>
-                <p>Sunday: 10:00 AM – 8:00 PM</p>
-            </div>
-            <div>
-                <h4>Follow Us</h4>
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook">f</a>
-                    <a href="#" aria-label="Instagram">📷</a>
-                    <a href="#" aria-label="WhatsApp">📱</a>
-                </div>
+    <!-- ========== CART SCREEN ========== -->
+    <section id="view-cart" class="kiosk-view">
+        <header class="kiosk-header">
+            <button type="button" class="kiosk-back" id="btnCloseCart" aria-label="Back">←</button>
+            <h2 class="kiosk-title">Your Cart</h2>
+        </header>
+        <div class="kiosk-content cart-content">
+            <ul class="cart-list" id="cartList"></ul>
+            <p class="cart-grand-total">Grand Total: ₹<span id="cartGrandTotal">0</span></p>
+            <div class="cart-actions">
+                <button type="button" class="kiosk-btn kiosk-btn-secondary" id="btnClearCart">Clear Cart</button>
+                <button type="button" class="kiosk-btn kiosk-btn-primary" id="btnProceedToPayment">Proceed to Payment</button>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>© Surya Sweets. Order online or visit us.</p>
-            <a href="admin.html" class="admin-link">Admin</a>
-        </div>
-    </footer>
+    </section>
 
-    <script src="js/data.js"></script>
-    <script src="js/nav.js"></script>
-    <script src="js/script.js"></script>
+    <!-- ========== PAYMENT SCREEN ========== -->
+    <section id="view-payment" class="kiosk-view">
+        <header class="kiosk-header">
+            <button type="button" class="kiosk-back" id="btnBackFromPayment" aria-label="Back">←</button>
+            <h2 class="kiosk-title">Scan QR to Pay</h2>
+        </header>
+        <div class="kiosk-content payment-content">
+            <p class="payment-total">Total Amount: <strong>₹<span id="paymentTotalAmount">0</span></strong></p>
+            <div class="payment-qr-placeholder" id="paymentQrPlaceholder">
+                <img src="assets/scan.jpeg" alt="UPI QR Code">
+                <!-- <span>QR Code</span> -->
+                <small>Scan with UPI app</small>
+            </div>
+            <button type="button" class="kiosk-btn kiosk-btn-primary kiosk-btn-large" id="btnIHavePaid">I Have Paid</button>
+        </div>
+    </section>
+
+    <!-- ========== PAYMENT SUCCESS SCREEN ========== -->
+    <section id="view-success" class="kiosk-view">
+        <div class="success-content">
+            <div class="success-icon">✓</div>
+            <h1 class="success-title">Payment Successful</h1>
+            <p class="success-msg">Printing Bill...</p>
+        </div>
+    </section>
+
+    <!-- ========== RECEIPT SCREEN ========== -->
+    <section id="view-receipt" class="kiosk-view">
+        <header class="kiosk-header">
+            <h2 class="kiosk-title">Your Bill</h2>
+        </header>
+        <div class="kiosk-content receipt-content">
+            <div class="receipt-paper" id="receiptPaper">
+                <h3 class="receipt-shop">Surya Sweets</h3>
+                <p class="receipt-address">Beawar, Rajasthan</p>
+                <p class="receipt-meta">Order No: <span id="receiptOrderNo"></span></p>
+                <p class="receipt-meta">Date & Time: <span id="receiptDateTime"></span></p>
+                <hr class="receipt-hr">
+                <ul class="receipt-items" id="receiptItems"></ul>
+                <hr class="receipt-hr">
+                <p class="receipt-total">Total: ₹<span id="receiptTotal">0</span></p>
+                <p class="receipt-msg">Please show this bill at the counter to collect your items.</p>
+            </div>
+            <div class="receipt-actions">
+                <button type="button" class="kiosk-btn kiosk-btn-primary kiosk-btn-large" id="btnPrintBill">Print Bill</button>
+                <button type="button" class="kiosk-btn kiosk-btn-secondary" id="btnNewOrder">New Order</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/kiosk-data.js"></script>
+    <script src="js/kiosk.js"></script>
 </body>
 </html>
