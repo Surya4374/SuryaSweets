@@ -1,7 +1,7 @@
 (function () {
     var UPI_ID = "7850990344@ptsbi";
     var orderData = JSON.parse(localStorage.getItem("orderData")) || {};
-    var total = localStorage.getItem("orderTotal") || localStorage.getItem("cartTotal") || 0;
+    var total = parseInt(localStorage.getItem("orderTotal"), 10) || parseInt(localStorage.getItem("cartTotal"), 10) || 0;
 
     var listEl = document.getElementById("paymentOrderList");
     var totalEl = document.getElementById("paymentTotal");
@@ -14,7 +14,12 @@
         return;
     }
 
-    total = parseInt(total, 10) || 0;
+    /* Ensure total is correct: compute from orderData if stored total is 0 */
+    if (total <= 0) {
+        for (var key in orderData) {
+            total += (orderData[key].quantity || 0) * (orderData[key].price || 0);
+        }
+    }
     totalEl.textContent = total;
 
     for (var item in orderData) {

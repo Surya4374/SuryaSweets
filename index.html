@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surya Sweets</title>
+    <title>Surya Sweets – Fresh Mithai & More</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Sticky Navbar -->
     <header>
         <span class="back-btn placeholder"></span>
         <a href="index.html" class="logo">Surya Sweets</a>
@@ -21,22 +21,59 @@
         <nav class="main-nav" id="mainNav">
             <a href="index.html">Home</a>
             <a href="menu.html">Menu</a>
-            <a href="menu.html" class="cart-link">🛒 Cart: <span id="cartCount">0</span></a>
+            <a href="menu.html" class="cart-link">🛒 <span id="cartCount">0</span></a>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <h1>Welcome to Surya Sweets</h1>
-        <p>Fresh sweets, ice creams & more. Choose a category to start ordering.</p>
+        <p>Fresh mithai, ice creams & more. Choose a category to start ordering.</p>
     </section>
 
-    <!-- Category Section -->
+    <!-- Search & category filters -->
+    <div class="search-filters-wrap">
+        <div class="search-bar-wrap">
+            <input type="text" id="searchCategories" placeholder="Search categories..." aria-label="Search categories">
+        </div>
+        <div class="category-filters" id="categoryFilters">
+            <button type="button" class="filter-btn active" data-category="">All</button>
+        </div>
+    </div>
+
+    <!-- Category grid -->
     <section class="categories" id="categoryContainer"></section>
 
+    <!-- Professional footer -->
     <footer class="site-footer">
-        <p>© Surya Sweets. Order online or visit us.</p>
-        <a href="admin.html" class="admin-link">Admin</a>
+        <div class="footer-grid">
+            <div>
+                <h4>Address</h4>
+                <p>123 Sweet Street, City Market<br>Near Temple Road</p>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Phone: +91 7850990344</p>
+                <p>Email: suryasweets@example.com</p>
+            </div>
+            <div>
+                <h4>Opening Hours</h4>
+                <p>Mon – Sat: 9:00 AM – 9:00 PM</p>
+                <p>Sunday: 10:00 AM – 8:00 PM</p>
+            </div>
+            <div>
+                <h4>Follow Us</h4>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook">f</a>
+                    <a href="#" aria-label="Instagram">📷</a>
+                    <a href="#" aria-label="WhatsApp">📱</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© Surya Sweets. Order online or visit us.</p>
+            <a href="admin.html" class="admin-link">Admin</a>
+        </div>
     </footer>
 
     <script src="js/data.js"></script>
